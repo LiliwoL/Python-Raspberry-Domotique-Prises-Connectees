@@ -42,7 +42,7 @@ def initGPIO():
 def switchGPIO(prise: int):
 
     old_state = getGPIOState(prises[prise])
-    if old_state == "on" || old_state == 1:
+    if old_state == "on" or old_state == 1:
         new_state = GPIO.LOW
     else:
         new_state = GPIO.HIGH
