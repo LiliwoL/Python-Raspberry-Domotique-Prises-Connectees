@@ -18,10 +18,7 @@ import time
 
 
 # Definitions correspondence GPIO / Prises
-PRISE_1=18
-PRISE_2=17
-PRISE_3=18
-PRISE_4=18
+prises = { 1: 15, 2: 6, 3: 13, 4: 19}
 
 # Intitialisation du GPIO
 def initGPIO():
@@ -32,52 +29,45 @@ def initGPIO():
     GPIO.setwarnings(False)
 
     # Setup PINS
-    GPIO.setup(PRISE_1, GPIO.OUT)
-    GPIO.output(PRISE_1, GPIO.LOW)
+    for prise in prises:
+        GPIO.setup(prises[prise], GPIO.OUT)
+        GPIO.output(prises[prise], GPIO.LOW)
 
-    print("         * Prise 1 -- OK")
+        print("         * Prise ", prises[prise], " -- OK : ", GPIO.input(prises[prise]))
 
-    time.sleep(1)
-
-    GPIO.setup(PRISE_2, GPIO.OUT)
-    GPIO.output(PRISE_2, GPIO.LOW)
-
-    print("         * Prise 2 -- OK")
-
-    time.sleep(1)
-
-    GPIO.setup(PRISE_3, GPIO.OUT)
-    GPIO.output(PRISE_3, GPIO.LOW)
-
-    print("         * Prise 3 -- OK")
-
-    time.sleep(1)
-
-    GPIO.setup(PRISE_4, GPIO.OUT)
-    GPIO.output(PRISE_4, GPIO.LOW)
-
-    print("         * Prise 4 -- OK")
+        time.sleep(1)
 
 
 # Méthode d'accès au GPIO
-def switchGPIO( prise ):
+def switchGPIO(prise: int):
 
-    print("         * Prise ", prise)
+    old_state = getGPIOState(prises[prise])
+    if old_state == "on":
+        new_state = GPIO.LOW
+    else:
+        new_state = GPIO.HIGH
+
+    print("Old ", old_state, " New ", new_state)
 
     # 1. Récupération de l'état actuel et Changement
-    GPIO.output( prise, not GPIO.input(prise) )
+    GPIO.output(prises[prise], new_state)
 
     # 2. Renvoi du nouvel état
-    print("             * Etat ", GPIO.input(prise) )
-    return GPIO.input(prise)
-
+    print("             * Etat ", new_state)
+    return new_state
 
 
 # Méthode pour lire l'etat de la prise
-def getGPIOState( prise ):
-    return GPIO.input(prise)
+def getGPIOState(prise_bcm: int):
 
+    state = GPIO.input(prise_bcm)
+    if state:
+        state_text = GPIO.HIGH
+    else:
+        state_text = GPIO.LOW
 
+    print( "Etat de la prise ", prise_bcm, " : ", state_text)
+    return state_text
 
 
 # Définition des routes
@@ -100,19 +90,19 @@ def api_index():
         [
             {
                 'Prise': 1,
-                'state': getGPIOState(1)
+                'state': getGPIOState(prises[1])
             },
             {
                 'Prise': 2,
-                'state': getGPIOState(2)
+                'state': getGPIOState(prises[2])
             },
             {
                 'Prise': 3,
-                'state': getGPIOState(3)
+                'state': getGPIOState(prises[3])
             },
             {
                 'Prise': 4,
-                'state': getGPIOState(4)
+                'state': getGPIOState(prises[4])
             }
         ]
     )
@@ -121,28 +111,30 @@ def api_index():
 # Switch POST
 # ----------------------
 @app.route(
-    "/api/switch/<prise>",
+    "/api/switch/<int:prise>",
     methods=['POST']
 )
-def api_switch_post(prise):
+def api_switch_post(prise: int):
+
+    switched_state = switchGPIO(prise)
 
     return jsonify(
         {
             'Prise': prise,
-            'state': switchGPIO(prise)
+            'state': switched_state
         }
     )
 
 @app.route(
-    "/api/switch/<prise:num>",
+    "/api/switch/<int:prise>",
     methods=['GET']
 )
-def api_switch_get(prise):
+def api_switch_get(prise: int):
 
     return jsonify(
         {
             'Prise': prise,
-            'state': getGPIOState(prise)
+            'state': getGPIOState(prises[prise])
         }
     )
 
@@ -167,13 +159,13 @@ def web_index():
 # To  switch
 # ----------------------
 @app.route(
-    "/switch/<prise:num>",
+    "/switch/<int:prise>",
     methods=['GET']
 )
-def web_switch(prise):
-    switchGPIO(prise)
+def web_switch(prise: int):
+    state = switchGPIO(prises[prise])
 
-    return render_template("switch.html", prise=prise)
+    return render_template("switch.html", prise=prise, state=state)
 
 
 
@@ -183,5 +175,5 @@ if __name__ == '__main__':
         use_reloader=True,
         debug=True,
         host="0.0.0.0",
-        port=105
+        port=5000
     )

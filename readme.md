@@ -17,6 +17,13 @@ URL | Description
 /index | Page d'accueil
 /switch/<numero de prise> | Change l'état de la prise
 
+
+### Requis
+
+* Mock.GPIO
+
+https://github.com/codenio/Mock.GPIO
+
 ## Routes
 
 ### API
