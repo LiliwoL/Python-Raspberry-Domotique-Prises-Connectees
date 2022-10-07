@@ -173,7 +173,7 @@ def web_switch(prise: int):
 if __name__ == '__main__':
     app.run(
         use_reloader=True,
-        debug=True,
-        host='192.168.0.26',
+        #debug=True,
+        host='0.0.0.0',
         port=5000
     )
