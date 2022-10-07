@@ -174,6 +174,6 @@ if __name__ == '__main__':
     app.run(
         use_reloader=True,
         debug=True,
-        host='0.0.0.0',
+        host='192.168.0.26',
         port=5000
     )
