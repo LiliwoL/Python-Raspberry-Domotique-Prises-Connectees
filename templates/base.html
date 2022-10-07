@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{%block title %}FlaskTest{% endblock %}</title>
+    </head>
+
+    <body>
+        <h2>Switch GPIO</h2>
+        <h4>Changement d'état</h4>
+
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('switch', prise=1) }}">Switch 1</a>
+        <a href="{{ url_for('switch', prise=2) }}">Switch 2</a>
+        <a href="{{ url_for('switch', prise=3) }}">Switch 3</a>
+        <a href="{{ url_for('switch', prise=4) }}">Switch 4</a>
+
+        <!-- this section can be replaced by a child document -->
+        {% block body %}
+
+            <p>This is a Flask application.</p>
+
+        {% endblock %}
+    </body>
+</html>
