@@ -43,8 +43,10 @@ def switchGPIO(prise: int):
 
     old_state = getGPIOState(prises[prise])
     if old_state == "on" or old_state == 1:
+        print("On passe de 1 à 0")
         new_state = GPIO.LOW
     else:
+        print("On passe de 0 à 1")
         new_state = GPIO.HIGH
 
     print("Old ", old_state, " New ", new_state)
