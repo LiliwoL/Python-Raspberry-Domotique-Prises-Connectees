@@ -42,7 +42,7 @@ def initGPIO():
 def switchGPIO(prise: int):
 
     old_state = getGPIOState(prises[prise])
-    if old_state == "on":
+    if old_state == "on" || old_state == 1:
         new_state = GPIO.LOW
     else:
         new_state = GPIO.HIGH
@@ -173,7 +173,7 @@ def web_switch(prise: int):
 if __name__ == '__main__':
     app.run(
         use_reloader=True,
-        #debug=True,
+        debug=True,
         host='0.0.0.0',
         port=5000
     )
