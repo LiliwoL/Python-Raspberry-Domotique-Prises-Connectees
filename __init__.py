@@ -83,6 +83,12 @@ def getGPIOState(prise_bcm: int):
     print("Etat de la prise ", prise_bcm, " : ", state_text)
     return state_text
 
+
+# Méthode pour lire TOUS les états
+def getAllGPIOState():
+    for prise in tab_prises_bcm:
+        getGPIOState(prise)
+
 # -----------------------------------------------------
 
 # Définition des routes
@@ -100,6 +106,35 @@ def api_index():
 
     # 1. Initialisation
     initGPIO()
+    return jsonify(
+        [
+            {
+                'Prise': 1,
+                'state': getGPIOState(tab_prises_bcm[1])
+            },
+            {
+                'Prise': 2,
+                'state': getGPIOState(tab_prises_bcm[2])
+            },
+            {
+                'Prise': 3,
+                'state': getGPIOState(tab_prises_bcm[3])
+            },
+            {
+                'Prise': 4,
+                'state': getGPIOState(tab_prises_bcm[4])
+            }
+        ]
+    )
+
+
+# Read all GPIO state
+# ----------------------
+@app.route(
+    '/api/all',
+    methods=['GET']
+)
+def api_read_all():
     return jsonify(
         [
             {
