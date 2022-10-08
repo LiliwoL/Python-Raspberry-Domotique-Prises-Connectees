@@ -14,63 +14,76 @@ except:
     import Mock.GPIO as GPIO
 # Time
 import time
+
 # #Import -------------------------
 
 
 # Definitions correspondence GPIO / Prises
-prises = { 1: 15, 2: 6, 3: 13, 4: 19}
+tab_prises_bcm = {
+    1: 15,  # Prise 1 -- GPIO 15
+    2: 6,
+    3: 13,
+    4: 19
+}
 
-# Intitialisation du GPIO
+
+# Initialisation du GPIO
 def initGPIO():
-
     print("    * Initialisation du GPIO")
 
-    GPIO.setmode(GPIO.BCM)
+    # Initialisation du GPIO
+    GPIO.setmode(GPIO.BCM)  # Utilisation du GPIO en mode BCM
     GPIO.setwarnings(False)
 
-    # Setup PINS
-    for prise in prises:
-        GPIO.setup(prises[prise], GPIO.OUT)
-        GPIO.output(prises[prise], GPIO.LOW)
+    # Setup des GPIO utilisés
+    for prise in tab_prises_bcm:
+        # On définit ce GPIO en Output (on lui enverra des données)
+        GPIO.setup(tab_prises_bcm[prise], GPIO.OUT)
+        # Par défaut, ce GPIO sera à 0
+        GPIO.output(tab_prises_bcm[prise], GPIO.LOW)
 
-        print("         * Prise ", prises[prise], " -- OK : ", GPIO.input(prises[prise]))
+        print("         * Prise ", tab_prises_bcm[prise], " -- OK : ", getGPIOState(tab_prises_bcm[prise]))
 
         time.sleep(1)
 
 
 # Méthode d'accès au GPIO
 def switchGPIO(prise: int):
+    # Lecture de l'état actuel
+    current_state = getGPIOState(tab_prises_bcm[prise])
 
-    old_state = getGPIOState(prises[prise])
-    if old_state == "on" or old_state == 1:
+    print ("Current state ", current_state)
+
+    if current_state == "on" or current_state == 1:
         print("On passe de 1 à 0")
         new_state = GPIO.LOW
     else:
         print("On passe de 0 à 1")
         new_state = GPIO.HIGH
 
-    print("Old ", old_state, " New ", new_state)
+    print("Old ", current_state, " New ", new_state)
 
     # 1. Récupération de l'état actuel et Changement
-    GPIO.output(prises[prise], new_state)
+    GPIO.output(tab_prises_bcm[prise], new_state)
 
     # 2. Renvoi du nouvel état
-    print("             * Etat ", new_state)
+    print("             * Etat ", new_state, " Etat reel: ", getGPIOState(tab_prises_bcm[prise]))
     return new_state
 
 
 # Méthode pour lire l'etat de la prise
+# Renvoie 1 ou 0
 def getGPIOState(prise_bcm: int):
-
     state = GPIO.input(prise_bcm)
     if state:
         state_text = GPIO.HIGH
     else:
         state_text = GPIO.LOW
 
-    print( "Etat de la prise ", prise_bcm, " : ", state_text)
+    print("Etat de la prise ", prise_bcm, " : ", state_text)
     return state_text
 
+# -----------------------------------------------------
 
 # Définition des routes
 # ----------------------
@@ -83,7 +96,6 @@ def getGPIOState(prise_bcm: int):
     methods=['GET']
 )
 def api_index():
-
     # On est sur la page de base
 
     # 1. Initialisation
@@ -92,19 +104,19 @@ def api_index():
         [
             {
                 'Prise': 1,
-                'state': getGPIOState(prises[1])
+                'state': getGPIOState(tab_prises_bcm[1])
             },
             {
                 'Prise': 2,
-                'state': getGPIOState(prises[2])
+                'state': getGPIOState(tab_prises_bcm[2])
             },
             {
                 'Prise': 3,
-                'state': getGPIOState(prises[3])
+                'state': getGPIOState(tab_prises_bcm[3])
             },
             {
                 'Prise': 4,
-                'state': getGPIOState(prises[4])
+                'state': getGPIOState(tab_prises_bcm[4])
             }
         ]
     )
@@ -117,7 +129,7 @@ def api_index():
     methods=['POST']
 )
 def api_switch_post(prise: int):
-
+    # Récupération de l'état APRES le switch
     switched_state = switchGPIO(prise)
 
     return jsonify(
@@ -127,16 +139,16 @@ def api_switch_post(prise: int):
         }
     )
 
+
 @app.route(
     "/api/switch/<int:prise>",
     methods=['GET']
 )
 def api_switch_get(prise: int):
-
     return jsonify(
         {
             'Prise': prise,
-            'state': getGPIOState(prises[prise])
+            'state': getGPIOState(tab_prises_bcm[prise])
         }
     )
 
@@ -150,12 +162,12 @@ def api_switch_get(prise: int):
     methods=['GET']
 )
 def web_index():
-
     # On est sur la page de base
 
     # 1. Initialisation
     initGPIO()
     return render_template("index.html")
+
 
 # Switch GET
 # To  switch
@@ -165,11 +177,9 @@ def web_index():
     methods=['GET']
 )
 def web_switch(prise: int):
-    state = switchGPIO(prises[prise])
+    state = switchGPIO(tab_prises_bcm[prise])
 
     return render_template("switch.html", prise=prise, state=state)
-
-
 
 
 if __name__ == '__main__':
@@ -179,3 +189,5 @@ if __name__ == '__main__':
         host='0.0.0.0',
         port=5000
     )
+
+    initGPIO()
