@@ -2,7 +2,7 @@
 
 # Import -------------------------
 # FLASK
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 
@@ -14,7 +14,6 @@ except:
     import Mock.GPIO as GPIO
 # Time
 import time
-
 # #Import -------------------------
 
 
@@ -25,6 +24,14 @@ tab_prises_bcm = {
     3: 26,
     4: 19
 }
+
+
+# Check API Key validity
+def is_valid(api_key):
+    if api_key == "raspB3rr1":
+        return True
+    else:
+        return False
 
 
 # Initialisation du GPIO
@@ -99,62 +106,81 @@ def getAllGPIOState():
 # ----------------------
 @app.route(
     '/api/',
-    methods=['GET']
+    methods=['POST']
 )
 def api_index():
-    # On est sur la page de base
 
-    # 1. Initialisation
-    initGPIO()
-    return jsonify(
-        [
-            {
-                'Prise': 1,
-                'state': getGPIOState(tab_prises_bcm[1])
-            },
-            {
-                'Prise': 2,
-                'state': getGPIOState(tab_prises_bcm[2])
-            },
-            {
-                'Prise': 3,
-                'state': getGPIOState(tab_prises_bcm[3])
-            },
-            {
-                'Prise': 4,
-                'state': getGPIOState(tab_prises_bcm[4])
-            }
-        ]
-    )
+    # Check if request contains JSON
+    if request.json:
+        api_key = request.json.get("api_key")
+    else:
+        return {"message": "Please provide an API key"}, 400
+
+    # Check if API key is correct and valid
+    if request.method != "POST" and not is_valid(api_key):
+        return {"message": "The provided API key is not valid"}, 403
+    else:
+        # 1. Initialisation
+        initGPIO()
+        return jsonify(
+            [
+                {
+                    'Prise': 1,
+                    'state': getGPIOState(tab_prises_bcm[1])
+                },
+                {
+                    'Prise': 2,
+                    'state': getGPIOState(tab_prises_bcm[2])
+                },
+                {
+                    'Prise': 3,
+                    'state': getGPIOState(tab_prises_bcm[3])
+                },
+                {
+                    'Prise': 4,
+                    'state': getGPIOState(tab_prises_bcm[4])
+                }
+            ]
+        )
 
 
 # Read all GPIO state
 # ----------------------
 @app.route(
     '/api/all',
-    methods=['GET']
+    methods=['POST']
 )
 def api_read_all():
-    return jsonify(
-        [
-            {
-                'Prise': 1,
-                'state': getGPIOState(tab_prises_bcm[1])
-            },
-            {
-                'Prise': 2,
-                'state': getGPIOState(tab_prises_bcm[2])
-            },
-            {
-                'Prise': 3,
-                'state': getGPIOState(tab_prises_bcm[3])
-            },
-            {
-                'Prise': 4,
-                'state': getGPIOState(tab_prises_bcm[4])
-            }
-        ]
-    )
+    # Check if request contains JSON
+    if request.json:
+        api_key = request.json.get("api_key")
+    else:
+        return {"message": "Please provide an API key"}, 400
+
+    # Check if API key is correct and valid
+    if request.method != "POST" and not is_valid(api_key):
+        return {"message": "The provided API key is not valid"}, 403
+    else:
+        return jsonify(
+            [
+                {
+                    'Prise': 1,
+                    'state': getGPIOState(tab_prises_bcm[1])
+                },
+                {
+                    'Prise': 2,
+                    'state': getGPIOState(tab_prises_bcm[2])
+                },
+                {
+                    'Prise': 3,
+                    'state': getGPIOState(tab_prises_bcm[3])
+                },
+                {
+                    'Prise': 4,
+                    'state': getGPIOState(tab_prises_bcm[4])
+                }
+            ]
+        )
 
 
 # Switch POST
@@ -163,29 +189,49 @@ def api_read_all():
     "/api/switch/<int:prise>",
     methods=['POST']
 )
-def api_switch_post(prise: int):
-    # Récupération de l'état APRES le switch
-    switched_state = switchGPIO(prise)
+def api_switch(prise: int):
+    # Check if request contains JSON
+    if request.json:
+        api_key = request.json.get("api_key")
+    else:
+        return {"message": "Please provide an API key"}, 400
 
-    return jsonify(
-        {
-            'Prise': prise,
-            'state': switched_state
-        }
-    )
+    # Check if API key is correct and valid
+    if request.method != "POST" and not is_valid(api_key):
+        return {"message": "The provided API key is not valid"}, 403
+    else:
+        # Récupération de l'état APRES le switch
+        switched_state = switchGPIO(prise)
+
+        return jsonify(
+            {
+                'Prise': prise,
+                'state': switched_state
+            }
+        )
 
 
 @app.route(
-    "/api/switch/<int:prise>",
-    methods=['GET']
+    "/api/switch/state/<int:prise>",
+    methods=['POST']
 )
-def api_switch_get(prise: int):
-    return jsonify(
-        {
-            'Prise': prise,
-            'state': getGPIOState(tab_prises_bcm[prise])
-        }
-    )
+def api_switch_state(prise: int):
+    # Check if request contains JSON
+    if request.json:
+        api_key = request.json.get("api_key")
+    else:
+        return {"message": "Please provide an API key"}, 400
+
+    # Check if API key is correct and valid
+    if request.method != "POST" and not is_valid(api_key):
+        return {"message": "The provided API key is not valid"}, 403
+    else:
+        return jsonify(
+            {
+                'Prise': prise,
+                'state': getGPIOState(tab_prises_bcm[prise])
+            }
+        )
 
 
 # ----------------------
