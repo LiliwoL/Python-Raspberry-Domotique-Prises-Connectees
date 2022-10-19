@@ -14,6 +14,7 @@ except:
     import Mock.GPIO as GPIO
 # Time
 import time
+
 # #Import -------------------------
 
 
@@ -59,7 +60,7 @@ def switchGPIO(prise: int):
     # Lecture de l'état actuel
     current_state = getGPIOState(tab_prises_bcm[prise])
 
-    print ("Current state ", current_state)
+    print("Current state ", current_state)
 
     if current_state == "on" or current_state == 1:
         print("On passe de 1 à 0")
@@ -96,6 +97,7 @@ def getAllGPIOState():
     for prise in tab_prises_bcm:
         getGPIOState(prise)
 
+
 # -----------------------------------------------------
 
 # Définition des routes
@@ -104,12 +106,10 @@ def getAllGPIOState():
 # ----------------------
 # API
 # ----------------------
-@app.route(
-    '/api/',
-    methods=['POST']
+@app.post(
+    '/api/'
 )
 def api_index():
-
     # Check if request contains JSON
     if request.json:
         api_key = request.json.get("api_key")
@@ -146,9 +146,8 @@ def api_index():
 
 # Read all GPIO state
 # ----------------------
-@app.route(
-    '/api/all',
-    methods=['POST']
+@app.post(
+    '/api/all'
 )
 def api_read_all():
     # Check if request contains JSON
@@ -185,9 +184,8 @@ def api_read_all():
 
 # Switch POST
 # ----------------------
-@app.route(
-    "/api/switch/<int:prise>",
-    methods=['POST']
+@app.post(
+    "/api/switch/<int:prise>"
 )
 def api_switch(prise: int):
     # Check if request contains JSON
@@ -211,9 +209,8 @@ def api_switch(prise: int):
         )
 
 
-@app.route(
-    "/api/switch/state/<int:prise>",
-    methods=['POST']
+@app.post(
+    "/api/switch/state/<int:prise>"
 )
 def api_switch_state(prise: int):
     # Check if request contains JSON
@@ -238,9 +235,8 @@ def api_switch_state(prise: int):
 # Web
 # ----------------------
 
-@app.route(
-    '/',
-    methods=['GET']
+@app.get(
+    '/'
 )
 def web_index():
     # On est sur la page de base
@@ -253,9 +249,8 @@ def web_index():
 # Switch GET
 # To  switch
 # ----------------------
-@app.route(
-    "/switch/<int:prise>",
-    methods=['GET']
+@app.get(
+    "/switch/<int:prise>"
 )
 def web_switch(prise: int):
     state = switchGPIO(tab_prises_bcm[prise])
@@ -264,7 +259,6 @@ def web_switch(prise: int):
 
 
 if __name__ == '__main__':
-
     initGPIO()
 
     app.run(
@@ -273,4 +267,3 @@ if __name__ == '__main__':
         host='0.0.0.0',
         port=5000
     )
-
