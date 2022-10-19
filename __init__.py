@@ -106,8 +106,9 @@ def getAllGPIOState():
 # ----------------------
 # API
 # ----------------------
-@app.post(
-    '/api/'
+@app.route(
+    '/api/',
+    methods=['POST']
 )
 def api_index():
     # Check if request contains JSON
@@ -146,8 +147,9 @@ def api_index():
 
 # Read all GPIO state
 # ----------------------
-@app.post(
-    '/api/all'
+@app.route(
+    '/api/all',
+    methods=['POST']
 )
 def api_read_all():
     # Check if request contains JSON
@@ -184,8 +186,9 @@ def api_read_all():
 
 # Switch POST
 # ----------------------
-@app.post(
-    "/api/switch/<int:prise>"
+@app.route(
+    "/api/switch/<int:prise>",
+    methods=['POST']
 )
 def api_switch(prise: int):
     # Check if request contains JSON
@@ -209,8 +212,9 @@ def api_switch(prise: int):
         )
 
 
-@app.post(
-    "/api/switch/state/<int:prise>"
+@app.route(
+    "/api/switch/state/<int:prise>",
+    methods=['POST']
 )
 def api_switch_state(prise: int):
     # Check if request contains JSON
@@ -235,8 +239,9 @@ def api_switch_state(prise: int):
 # Web
 # ----------------------
 
-@app.get(
-    '/'
+@app.route(
+    '/',
+    methods=['GET']
 )
 def web_index():
     # On est sur la page de base
@@ -249,8 +254,9 @@ def web_index():
 # Switch GET
 # To  switch
 # ----------------------
-@app.get(
-    "/switch/<int:prise>"
+@app.route(
+    "/switch/<int:prise>",
+    methods=['GET']
 )
 def web_switch(prise: int):
     state = switchGPIO(tab_prises_bcm[prise])
