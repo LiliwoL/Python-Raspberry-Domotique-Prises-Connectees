@@ -218,6 +218,9 @@ def web_switch(prise: int):
 
 
 if __name__ == '__main__':
+
+    initGPIO()
+
     app.run(
         use_reloader=True,
         debug=True,
@@ -225,4 +228,3 @@ if __name__ == '__main__':
         port=5000
     )
 
-    initGPIO()
