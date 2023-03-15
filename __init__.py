@@ -20,10 +20,10 @@ import time
 
 # Definitions correspondence GPIO / Prises
 tab_prises_bcm = {
-    1: 21,  # Prise 1 -- GPIO 15
-    2: 20,
-    3: 26,
-    4: 19
+    1: 21,  # Prise 1 -- GPIO 21 - Pin 40
+    2: 20,  # Prise 2 -- GPIO 20 - Pin 38
+    3: 26,  # Prise 3 -- GPIO 26 - Pin 37
+    4: 19   # Prise 4 -- GPIO 19 - Pin 35
 }
 
 
