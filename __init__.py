@@ -11,7 +11,8 @@ app = Flask(__name__)
 try:
     import RPi.GPIO as GPIO
 except:
-    import Mock.GPIO as GPIO
+    #import Mock.GPIO as GPIO
+    from Mock.GPIO import GPIO
 # Time
 import time
 

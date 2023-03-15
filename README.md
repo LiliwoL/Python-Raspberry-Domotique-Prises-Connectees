@@ -28,6 +28,8 @@ URL | Description
 
 https://github.com/codenio/Mock.GPIO
 
+sudo apt install python3-rpi.gpio
+
 ## Routes
 
 ### API
