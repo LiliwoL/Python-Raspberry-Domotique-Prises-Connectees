@@ -8,6 +8,10 @@ Un boitier électrique contenant:
 
 Un Raspberry Pi contrôlant le relais et ainsi, les prises 220V
 
+## Schéma
+
+![doc/img.png](doc/img.png)
+
 ## Partie logicielle
 
 Une API REST pour manipuler le relais.
