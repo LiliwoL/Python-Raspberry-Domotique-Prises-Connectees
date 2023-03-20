@@ -9,9 +9,10 @@ app = Flask(__name__)
 # GPIO
 # On essaie RPi.GPIO si on est sur un Raspberry, sinon Mock
 try:
-    import RPi.GPIO as GPIO
+    #import RPi.GPIO as GPIO
+    import Mock.GPIO as GPIO
 except:
-    #import Mock.GPIO as GPIO
+    import Mock.GPIO as GPIO
     from Mock.GPIO import GPIO
 # Time
 import time
@@ -93,7 +94,7 @@ def getGPIOState(prise_bcm: int):
     return state_text
 
 
-# Méthode pour lire TOUS les états
+# Méthode pour ire TOUS les états
 def getAllGPIOState():
     for prise in tab_prises_bcm:
         getGPIOState(prise)
