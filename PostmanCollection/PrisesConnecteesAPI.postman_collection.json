@@ -1,0 +1,136 @@
+{
+	"info": {
+		"_postman_id": "d9f8fbc6-9563-4a97-b85f-575ec8a5b5c5",
+		"name": "PrisesConnecteesAPI",
+		"description": "[https://github.com/LiliwoL/Python-Raspberry-Domotique-Prises-Connectees](https://github.com/LiliwoL/Python-Raspberry-Domotique-Prises-Connectees)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2209621"
+	},
+	"item": [
+		{
+			"name": "Index",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}",
+					"host": [
+						"{{URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Index API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_key\": \"raspB3rr1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Switch API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_key\": \"raspB3rr1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/switch/1",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"switch",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Switch State API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_key\": \"raspB3rr1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/switch/state/1",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"switch",
+						"state",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "http://192.168.1.38:5000/",
+			"type": "string"
+		}
+	]
+}

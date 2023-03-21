@@ -1,4 +1,5 @@
 # Nom de l'API Flask
-export set FLASK_APP=.
+export FLASK_APP=server.py
+export FLASK_ENV=development
 
 flask run --host=0.0.0.0
