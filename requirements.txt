@@ -1,3 +1,4 @@
 RPi.GPIO
 Mock.GPIO
 flask
+flask_cors
