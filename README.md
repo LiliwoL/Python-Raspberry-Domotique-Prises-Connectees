@@ -1,5 +1,9 @@
 # Projet de commande de prises électriques via Raspberry
 
+Backend pour le projet Raspberry de prises connectées.
+
+Frontend: https://github.com/LiliwoL/Vue-Raspberry-Domotique-Prises-Connectees
+
 ## Partie matérielle
 
 Un boitier électrique contenant:
